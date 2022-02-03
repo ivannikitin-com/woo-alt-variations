@@ -1,0 +1,33 @@
+<?php 
+$group_id = $args['group_id'];
+$var_product_id = $args['var_product_id'];
+$var_product_data = $args['var_product_data'];
+if (isset($var_product_data['product_id'])) {
+    $var_product_value = $var_product_data['product_id'];
+} else {
+    $var_product_value = ''; 
+}
+if (isset($var_product_data['image_id'])) {
+    $var_image_value = $var_product_data['image_id'];
+} else {
+    $var_image_value = '';
+}
+if (isset($var_product_data['var_attr_value'])) {
+    $var_attr_value = $var_product_data['var_attr_value'];
+} else {
+    $var_attr_value = '';
+}
+?>
+<div class="options_group">
+    <div class="variation_product_wrap">
+        <div class="form-field product_id_<?php echo $var_product_id; ?>_field ">
+            <label for="product_id_<?php echo $group_id.'_'.$var_product_id; ?>"><?php _e('Товар(id)','woo-alt-variations'); ?><input type="text" class="" style="" name="product_id[<?php echo $group_id.']['.$var_product_id; ?>]" id="product_id_<?php echo $group_id.'_'.$var_product_id; ?>" value="<?php echo $var_product_value; ?>" placeholder=""></label> </div>
+
+        <div class="form-field image_id_<?php echo $var_product_id; ?>_field ">
+            <label for="image_id_<?php echo $group_id.'_'.$var_product_id; ?>"><?php _e('Изображение(id)','woo-alt-variations'); ?><input type="text" class="" style="" name="image_id[<?php echo $group_id.']['.$var_product_id; ?>]" id="image_id_<?php echo $group_id.'_'.$var_product_id; ?>" value="<?php echo $var_image_value; ?>" placeholder=""</label></div>
+
+        <div class="form-field var_attr_value_<?php echo $var_product_id; ?>_field ">
+            <label for="var_attr_value_<?php echo $group_id.'_'.$var_product_id; ?>"><?php _e('Значение атрибута(текст)','woo-alt-variations'); ?><input type="text" class="" style="" name="var_attr_value[<?php echo $group_id.']['.$var_product_id; ?>]" id="var_attr_value_<?php echo $group_id.'_'.$var_product_id; ?>" value="<?php echo $var_attr_value; ?>" placeholder=""></label></div>
+        <a href="#" class="button remove_variation_product" title="<?php _e('Удалить товар','woo-alt-variations'); ?>"><span class="dashicons dashicons-minus"></span></a>
+    </div>
+</div>
