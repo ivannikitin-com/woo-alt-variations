@@ -253,14 +253,15 @@ class Woo_Alt_Variations {
         $attr_groups = json_decode($vars_info, true);
         $cur_var_attr_name = '';
         echo '<div class="alt_variations_groups_wrap">';
+        
         foreach ( $attr_groups as $key=>$attr_group ) {
             if (isset($attr_group['attr_name']) && $attr_group['attr_name']) {
                 //Ищем значение данного атрибута у текущего товара
+
+                $cur_var_attr_name = '';
                 foreach ($attr_group['products'] as $group_product) {
                     if ($group_product['product_id'] == $product->get_id()) {
-                        $cur_var_attr_name = $group_product['var_attr_name'];
-                    } else {
-                        $cur_var_attr_name = '';
+                        $cur_var_attr_name = $group_product['var_attr_value']; 
                     }
                 }
                 echo '<button class="var_header" onclick="jQuery.fancybox(
@@ -271,8 +272,12 @@ class Woo_Alt_Variations {
                     'height': 'auto',
                     'autoSize':false,
                     'top': 0
-                });".'">'.__('Выберите ','woo-alt-variations').$attr_group['attr_name'].' '.$cur_var_attr_name.'
-                <svg focusable="false" viewBox="0 0 24 24" class="range-revamp-svg-icon range-revamp-chunky-header__icon" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="m15.5996 12.0007-5.785 5.7857-1.4143-1.4141 4.3711-4.3716L8.4003 7.629l1.4143-1.4142 5.785 5.7859z"></path></svg>
+                });".'">';
+                echo '<span class="attr_wrap">';
+                echo '<span class="attr_title">'.__('Выберите ','woo-alt-variations').$attr_group['attr_name'].'</span>';
+                echo '<span class="attr_subtitle">'.$cur_var_attr_name.'</span>';
+                echo '</span>';
+                echo '<svg focusable="false" viewBox="0 0 24 24" class="range-revamp-svg-icon range-revamp-chunky-header__icon" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="m15.5996 12.0007-5.785 5.7857-1.4143-1.4141 4.3711-4.3716L8.4003 7.629l1.4143-1.4142 5.785 5.7859z"></path></svg>
                 </button>';
             }
             echo '<div class="fancybox-hidden" style="width:auto; max-width: 30rem;">';

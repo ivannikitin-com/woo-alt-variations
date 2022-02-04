@@ -62,6 +62,17 @@
 	font-weight: bold;
 }
 
+
+.alt_variations_groups_wrap .var_header .attr_wrap {
+	display: flex;
+	width: 90%;
+	justify-content: space-between;
+}
+
+.alt_variations_groups_wrap .var_header .attr_subtitle {
+	font-weight: normal;
+}
+
 .alt_variations_title {
 	font-weight: bold;
 	font-size: 15px;
