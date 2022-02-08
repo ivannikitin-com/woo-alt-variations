@@ -27,6 +27,11 @@
 	width: 28%;
 }
 
+.alt_variation.wc-metabox .variation_product_wrap .form-field {
+	display: flex;
+	flex-direction: column;
+}
+
 .alt_variation.wc-metabox h3 .form-field label {
 	margin-left: -100px;
 }
@@ -42,6 +47,8 @@
 }
 
 #alt_variations_product_data .remove_variation_product {
+	display: flex;
+	align-self: end;
 	height: 30px;
 	line-height: 30px;
 	text-align: center;
@@ -57,7 +64,6 @@
 	display: flex;
 	margin-bottom: 10px;
 	justify-content: space-between;
-	align-items: end;
 }
 
 .alt_variation.wc-metabox .variation_product_wrap label {

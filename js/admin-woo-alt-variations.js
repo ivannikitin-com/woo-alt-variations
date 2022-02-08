@@ -55,6 +55,14 @@ jQuery( function( $ ) {
 
                 /*$( '.woocommerce-notice-invalid-variation' ).remove();*/
                 $( event.target ).after( variation );
+                //$( 'select.wc-product-search' ).selectWoo( select2_args ).addClass( 'enhanced' );
+                // Ajax product search box
+                $( document.body ).trigger( 'wc-enhanced-select-init' );
+                $( document.body ).on( 'change', '.wc-product-search', function() {
+                    $( document.body ).trigger( 'wc-enhanced-select-init' );
+                } );
+
+                //$( document.body ).trigger( 'wc-enhanced-select-init' );
                 /*$( 'button.cancel-variation-changes, button.save-variation-changes' ).prop( 'disabled', false );*/
                 /*$( '#variable_product_options' ).trigger( 'woocommerce_variations_added', 1 );*/
                 /*wc_meta_boxes_product_variations_ajax.unblock();*/
@@ -68,4 +76,12 @@ jQuery( function( $ ) {
         }
     };
     wc_meta_boxes_product_alt_variations_ajax.init();
+
+
+    $( this ).on( 'change', '.wc-product-search', function() {
+        /*        if ( ! $( this ).closest( 'tr' ).is( ':last-child' ) ) {
+                    return;
+                }*/
+        $( document.body ).trigger( 'wc-enhanced-select-init' );
+    } );
 } );
