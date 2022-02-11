@@ -1,4 +1,30 @@
 jQuery( function( $ ) {
+    $( ".upload_image_button" ).on( 'click', function( event ) {
+        upload_button = $( this );
+        var frame;
+        event.preventDefault();
+        if ( frame ) {
+            frame.open();
+            return;
+        }
+        frame = wp.media();
+        frame.on( "select", function() {
+            // Grab the selected attachment.
+            var attachment = frame.state().get( "selection" ).first();
+            var attachmentUrl = attachment.attributes.url;
+            attachmentUrl = attachmentUrl.replace( '-scaled.', '.' );
+            frame.close();
+            upload_button.find( 'img' ).attr( 'src', attachmentUrl );
+            upload_button.find( 'input.image_id' ).val( attachment.attributes.id );
+            /*            $( ".zci-taxonomy-image" ).attr( "src", attachmentUrl );
+                        if ( upload_button.parent().prev().children().hasClass( "tax_list" ) ) {
+                            upload_button.parent().prev().children().val( attachmentUrl );
+                            upload_button.parent().prev().prev().children().attr( "src", attachmentUrl );
+                        } else
+                            $( "#zci_taxonomy_image" ).val( attachmentUrl );*/
+        } );
+        frame.open();
+    } );
     'use strict';
     var wc_meta_boxes_product_alt_variations_ajax = {
         init: function() {

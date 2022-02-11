@@ -48,7 +48,7 @@
 
 #alt_variations_product_data .remove_variation_product {
 	display: flex;
-	align-self: end;
+	align-self: center;
 	height: 30px;
 	line-height: 30px;
 	text-align: center;
@@ -64,6 +64,17 @@
 	display: flex;
 	margin-bottom: 10px;
 	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.alt_variation.wc-metabox .variation_product_wrap .product_id {
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.alt_variation.wc-metabox .variation_product_wrap .image_id,
+.alt_variation.wc-metabox .variation_product_wrap .var_attr_value {
+	width: 40%;
 }
 
 .alt_variation.wc-metabox .variation_product_wrap label {
