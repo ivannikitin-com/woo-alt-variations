@@ -243,7 +243,10 @@ class Woo_Alt_Variations {
     public function output_alt_variations_links() {
         global $product;
         //$thumbnail_size        = wc_get_image_size( 'gallery_thumbnail' );
-        $thumbnail_size = array(80,80);
+        //$thumbnail_size = 'gallery_thumbnail';
+        $gallery_thumbnail = wc_get_image_size( 'gallery_thumbnail' );
+        $thumbnail_size    = apply_filters( 'woocommerce_gallery_thumbnail_size', array( $gallery_thumbnail['width'], $gallery_thumbnail['height'] ) );
+        $image_size        = $thumbnail_size;        
 
         $vars_info = get_post_meta($product->get_id(),'vars_info', true);
         if (!$vars_info) {
@@ -267,11 +270,19 @@ class Woo_Alt_Variations {
                 echo '<button class="var_header" onclick="jQuery.fancybox(
                 {'."
                     'href':'#alt_variations_wrap_".$key."',
-                    'width':'calc(100% - 3rem)',
+                    /*'width':'calc(100% - 3rem)',*/
                     'minWidth':270,
-                    'height': 'auto',
-                    'autoSize':false,
-                    'top': 0
+                    'maxWidth':500,
+                    'height': '100%',
+                    /*'autoSize':true,*/
+                    'autoDimensions': false,
+                    /*'autoScale':true,*/
+                    'centerOnScroll': false,
+                    'fitToView': false,
+                    /*'scrolling': true,*/
+                    /*'autoCenter': true,*/
+                    'top': 0,
+                    'mainClass': 'alt_variations'
                 });".'">';
                 echo '<span class="attr_wrap">';
                 echo '<span class="attr_title">'.__('Выберите ','woo-alt-variations').$attr_group['attr_name'].'</span>';
@@ -297,6 +308,10 @@ class Woo_Alt_Variations {
                 }
                 if ($group_product['image_id']) {
                     $thumbnail_src = wp_get_attachment_image_src( $group_product['image_id'], $thumbnail_size );
+                    $thumbnail_src = wp_get_attachment_image(
+                        $group_product['image_id'],
+                        'cust_shop_thumbnail'
+                    );
                 } else {
                     $thumbnail_src = get_the_post_thumbnail_url($group_product['product_id'], $thumbnail_size);
                 }
@@ -306,7 +321,8 @@ class Woo_Alt_Variations {
                     $html = '<div class="woocommerce-product-gallery__image'.$active.'">';
                     $html .= sprintf( '<a href="%s">', get_permalink($group_product['product_id']));
                     $html .= '<div class="var_lnk_inner_wrap">';
-                    $html .= sprintf( '<img src="%s" alt="" class="wp-post-image" />', $thumbnail_src[0] );
+                    /*$html .= sprintf( '<img src="%s" alt="" class="wp-post-image" />', $thumbnail_src[0] );*/
+                    $html .= $thumbnail_src;
                     $html .= '<div class="var_title">'.$var_attr_value.'</div>';
                     $html .= '<div class="var_title">'.$var_product->get_price_html().'</div>';
                     $html .= '</div>';
