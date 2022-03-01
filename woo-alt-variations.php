@@ -269,7 +269,7 @@ class Woo_Alt_Variations {
                         $cur_var_attr_name = $group_product['var_attr_value']; 
                     }
                 } ?>
-                <button class="var_header" onclick="jQuery.fancybox({
+                <!--onclick="jQuery.fancybox({
                     'href':'#alt_variations_wrap_<?php echo $key; ?>',
                     'minWidth':270,
                     'maxWidth':500,
@@ -279,7 +279,8 @@ class Woo_Alt_Variations {
                     'fitToView': false,
                     'top': 0,
                     'mainClass': 'alt_variations'
-                })"> 
+                })" -->
+                <button class="var_header" data-toggle="modal" data-target="#myModal_<?php echo $key; ?>"> 
                 <span class="attr_wrap">
                 <span class="attr_title"><?php _e('Выберите ','woo-alt-variations').$attr_group['attr_name']; ?></span>
                 <span class="attr_subtitle"><?php echo $cur_var_attr_name; ?></span>
@@ -288,7 +289,12 @@ class Woo_Alt_Variations {
                 </button>
             <?php } ?>
             <?php ob_start();?>
-            <div class="fancybox-hidden" style="width:auto; max-width: 30rem;">
+            <!--<div class="fancybox-hidden" style="width:auto; max-width: 30rem;">-->
+            <div class="modal fade" id="myModal_<?php echo $key; ?>" tabindex="-1" role="dialog" aria-labelledby="myModal_<?php echo $key; ?>Label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <div id ="alt_variations_wrap_<?php echo $key; ?>" class="alt_variations_wrap">
                 <?php 
                 if (isset($attr_group['attr_name']) && $attr_group['attr_name']) { ?>
@@ -339,6 +345,9 @@ class Woo_Alt_Variations {
                     <?php }             
                 } ?>
                 </div><!-- /#alt_variations_wrap_<?php echo $key; ?> -->
+                        </div><!-- /.modal-header -->
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
             </div>
             <?php $html = ob_get_clean();            
             echo $html; ?>
