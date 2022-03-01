@@ -254,8 +254,10 @@ class Woo_Alt_Variations {
         }
         
         $attr_groups = json_decode($vars_info, true);
-        $cur_var_attr_name = '';
-        echo '<div class="alt_variations_groups_wrap">';
+        $cur_var_attr_name = ''; ?>
+        <div class="alt_variations_groups_wrap">
+
+        <?php
         
         foreach ( $attr_groups as $key=>$attr_group ) {
             if (isset($attr_group['attr_name']) && $attr_group['attr_name']) {
@@ -266,85 +268,83 @@ class Woo_Alt_Variations {
                     if ($group_product['product_id'] == $product->get_id()) {
                         $cur_var_attr_name = $group_product['var_attr_value']; 
                     }
-                }
-                echo '<button class="var_header" onclick="jQuery.fancybox(
-                {'."
-                    'href':'#alt_variations_wrap_".$key."',
-                    /*'width':'calc(100% - 3rem)',*/
+                } ?>
+                <button class="var_header" onclick="jQuery.fancybox({
+                    'href':'#alt_variations_wrap_<?php echo $key; ?>',
                     'minWidth':270,
                     'maxWidth':500,
                     'height': '100%',
-                    /*'autoSize':true,*/
                     'autoDimensions': false,
-                    /*'autoScale':true,*/
                     'centerOnScroll': false,
                     'fitToView': false,
-                    /*'scrolling': true,*/
-                    /*'autoCenter': true,*/
                     'top': 0,
                     'mainClass': 'alt_variations'
-                });".'">';
-                echo '<span class="attr_wrap">';
-                echo '<span class="attr_title">'.__('Выберите ','woo-alt-variations').$attr_group['attr_name'].'</span>';
-                echo '<span class="attr_subtitle">'.$cur_var_attr_name.'</span>';
-                echo '</span>';
-                echo '<svg focusable="false" viewBox="0 0 24 24" class="range-revamp-svg-icon range-revamp-chunky-header__icon" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="m15.5996 12.0007-5.785 5.7857-1.4143-1.4141 4.3711-4.3716L8.4003 7.629l1.4143-1.4142 5.785 5.7859z"></path></svg>
-                </button>';
-            }
-            echo '<div class="fancybox-hidden" style="width:auto; max-width: 30rem;">';
-            echo '<div id ="alt_variations_wrap_'.$key.'" class="alt_variations_wrap">';
-            if (isset($attr_group['attr_name']) && $attr_group['attr_name']) {
-                echo '<div class="alt_variations_title">'.$attr_group['attr_name'].'</div>';
-            }
-            foreach ($attr_group['products'] as $group_product) {
-                $var_product = wc_get_product( $group_product['product_id'] );
-                if (!$var_product) {
-                    continue;
-                }                
-                if ($group_product['product_id'] == $product->get_id()) {
-                    $active = " active";
-                } else {
-                    $active = "";
+                })"> 
+                <span class="attr_wrap">
+                <span class="attr_title"><?php _e('Выберите ','woo-alt-variations').$attr_group['attr_name']; ?></span>
+                <span class="attr_subtitle"><?php echo $cur_var_attr_name; ?></span>
+                </span>
+                <svg focusable="false" viewBox="0 0 24 24" class="range-revamp-svg-icon range-revamp-chunky-header__icon" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="m15.5996 12.0007-5.785 5.7857-1.4143-1.4141 4.3711-4.3716L8.4003 7.629l1.4143-1.4142 5.785 5.7859z"></path></svg>
+                </button>
+            <?php } ?>
+            <?php ob_start();?>
+            <div class="fancybox-hidden" style="width:auto; max-width: 30rem;">
+                <div id ="alt_variations_wrap_<?php echo $key; ?>" class="alt_variations_wrap">
+                <?php 
+                if (isset($attr_group['attr_name']) && $attr_group['attr_name']) { ?>
+                    <div class="alt_variations_title"><?php echo $attr_group['attr_name']; ?></div>
+                <?php 
                 }
-                if ($group_product['image_id']) {
-                    $thumbnail_src = wp_get_attachment_image_src( $group_product['image_id'], $thumbnail_size );
-                    $thumbnail_src = wp_get_attachment_image(
-                        $group_product['image_id'],
-                        'cust_shop_thumbnail'
-                    );
-                } else {
-                    $thumbnail_src = get_the_post_thumbnail_url($group_product['product_id'], $thumbnail_size);
-                }
-                $var_attr_value = isset($group_product['var_attr_value'])?$group_product['var_attr_value']:"";
+                foreach ($attr_group['products'] as $group_product) {
+                    $var_product = wc_get_product( $group_product['product_id'] );
+                    if (!$var_product) {
+                        continue;
+                    }                
+                    if ($group_product['product_id'] == $product->get_id()) {
+                        $active = " active";
+                    } else {
+                        $active = "";
+                    }
+                    if ($group_product['image_id']) {
+                        $thumbnail_src = wp_get_attachment_image_src( $group_product['image_id'], $thumbnail_size );
+                        $thumbnail_src = wp_get_attachment_image(
+                            $group_product['image_id'],
+                            'cust_shop_thumbnail'
+                        );
+                    } else {
+                        $thumbnail_src = get_the_post_thumbnail_url($group_product['product_id'], $thumbnail_size);
+                    }
+                    $var_attr_value = isset($group_product['var_attr_value'])?$group_product['var_attr_value']:"";
 
-                if ( $thumbnail_src ) {                    
-                    $html = '<div class="woocommerce-product-gallery__image'.$active.'">';
-                    $html .= sprintf( '<a href="%s">', get_permalink($group_product['product_id']));
-                    $html .= '<div class="var_lnk_inner_wrap">';
-                    /*$html .= sprintf( '<img src="%s" alt="" class="wp-post-image" />', $thumbnail_src[0] );*/
-                    $html .= $thumbnail_src;
-                    $html .= '<div class="var_title">'.$var_attr_value.'</div>';
-                    $html .= '<div class="var_title">'.$var_product->get_price_html().'</div>';
-                    $html .= '</div>';
-                    $html .= '</a>';
-                    $html .= '</div><!-- /.woocommerce-product-gallery__image -->';
-                } else {
-                    $html = '<div class="woocommerce-product-gallery__image--placeholder'.$active.'">';
-                    $html .= sprintf( '<a href="%s">', get_permalink($group_product['product_id']));
-                    $html .= '<div class="var_lnk_inner_wrap">';
-                    $html .= sprintf( '<img src="%s" alt="" class="wp-post-image" />', esc_url( wc_placeholder_img_src( $thumbnail_size ) ) );
-                    $html .= '<div class="var_title">'.$var_attr_value.'</div>';
-                    $html .= '<div class="var_title">'.$var_product->get_price_html().'</div>';
-                    $html .= '</div>';
-                    $html .= '</a>';
-                    $html .= '</div><!-- /.woocommerce-product-gallery__image--placeholder -->'; 
-                }
-                echo $html;            
-            }
-            echo '</div><!-- /#alt_variations_wrap_'.$key.' -->';
-            echo '</div>';
-        }
-        echo '</div><!-- /.alt_variations_groups_wrap -->';
+                    if ( $thumbnail_src ) { ?>               
+                    <div class="woocommerce-product-gallery__image<?php echo $active; ?>">
+                        <a href="<?php echo get_permalink($group_product['product_id']); ?>">
+                            <div class="var_lnk_inner_wrap">
+                                <?php echo $thumbnail_src; ?>
+                                <div class="var_title"><?php echo $var_attr_value; ?></div>
+                                <div class="var_title"><?php echo $var_product->get_price_html(); ?></div>
+                            </div>
+                        </a>
+                    </div><!-- /.woocommerce-product-gallery__image -->
+                    <?php } else { ?>
+                    <div class="woocommerce-product-gallery__image--placeholder'<?php echo $active; ?>">
+                       <a href="<?php echo get_permalink($group_product['product_id']); ?>">
+                            <div class="var_lnk_inner_wrap">
+                                <img src="<?php echo esc_url( wc_placeholder_img_src( $thumbnail_size ) ); ?>" alt="" class="wp-post-image" />
+                                <div class="var_title"><?php echo $var_attr_value; ?></div>
+                                <div class="var_title"><?php echo $var_product->get_price_html(); ?>-</div>
+                            </div>
+                        </a>
+                    </div><!-- /.woocommerce-product-gallery__image--placeholder --> 
+                    <?php }             
+                } ?>
+                </div><!-- /#alt_variations_wrap_<?php echo $key; ?> -->
+            </div>
+            <?php $html = ob_get_clean();            
+            echo $html; ?>
+        <?php } ?>
+        </div><!-- /.alt_variations_groups_wrap -->
+    <?php 
     }
 
     /**

@@ -27,6 +27,7 @@
 
 .alt_variations_wrap a .var_title {
 	display: flex;
+	flex-direction: column;
 	margin-right: 1.25rem;
 	text-transform: capitalize;
 	color: #000;
