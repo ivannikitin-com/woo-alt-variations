@@ -20,6 +20,7 @@ if (isset($var_product_data['var_attr_value'])) {
 ?>
 <div class="options_group">
     <div class="variation_product_wrap">
+        <!-- <div class="ui-sortable-handle" style="width: 17px; height:17px;"></div> -->
         <div class="form-field product_id product_id_<?php echo $var_product_id; ?>_field ">
             <label for="product_id_<?php echo $group_id.'_'.$var_product_id; ?>"><?php _e('Товар(id)','woo-alt-variations'); ?>
 <!--             <input type="text" class="wc-product-search wc-enhanced-select" style="" name="product_id[<?php //echo $group_id.']['.$var_product_id; ?>]" id="product_id_<?php //echo $group_id.'_'.$var_product_id; ?>" value="<?php //echo $var_product_value; ?>" placeholder="" data-action="woocommerce_json_search_products_and_variations" data-exclude="<?php echo $var_product_value; ?>"> -->

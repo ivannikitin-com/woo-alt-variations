@@ -30,6 +30,7 @@ $var_products = isset($args['var_products'])?$args['var_products']:array();
     </h3>
     <div class="woocommerce_variable_attributes wc-metabox-content">
                 <a class="button add_variation_product"><?php _e('Добавить товар','woo-alt-variations'); ?></a>
+                    <div class="sortable_wrap">
                 <?php 
                 if ($var_products) {
                     foreach($var_products as $var_product_key=>$var_product_data) {
@@ -42,6 +43,7 @@ $var_products = isset($args['var_products'])?$args['var_products']:array();
                     //load_template(dirname( __FILE__ ) .'/html-alt-variation-product-admin.php', false, array('group_id' => $group_id, 'var_product_data' => array(), 'var_product_id' => 0));
                 }
                 ?>
+                    </div>
     </div>
 </div>
 <?php

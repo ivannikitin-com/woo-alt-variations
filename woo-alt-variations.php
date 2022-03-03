@@ -258,6 +258,8 @@ class Woo_Alt_Variations {
         <div class="alt_variations_groups_wrap">
 
         <?php
+
+        $html = "";
         
         foreach ( $attr_groups as $key=>$attr_group ) {
             if (isset($attr_group['attr_name']) && $attr_group['attr_name']) {
@@ -282,7 +284,7 @@ class Woo_Alt_Variations {
                 })" -->
                 <button class="var_header" data-toggle="modal" data-target="#myModal_<?php echo $key; ?>"> 
                 <span class="attr_wrap">
-                <span class="attr_title"><?php _e('Выберите ','woo-alt-variations').$attr_group['attr_name']; ?></span>
+                <span class="attr_title"><?php echo __('Выберите ','woo-alt-variations').$attr_group['attr_name']; ?></span>
                 <span class="attr_subtitle"><?php echo $cur_var_attr_name; ?></span>
                 </span>
                 <svg focusable="false" viewBox="0 0 24 24" class="range-revamp-svg-icon range-revamp-chunky-header__icon" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="m15.5996 12.0007-5.785 5.7857-1.4143-1.4141 4.3711-4.3716L8.4003 7.629l1.4143-1.4142 5.785 5.7859z"></path></svg>
@@ -290,11 +292,11 @@ class Woo_Alt_Variations {
             <?php } ?>
             <?php ob_start();?>
             <!--<div class="fancybox-hidden" style="width:auto; max-width: 30rem;">-->
-            <div class="modal fade" id="myModal_<?php echo $key; ?>" tabindex="-1" role="dialog" aria-labelledby="myModal_<?php echo $key; ?>Label" aria-hidden="true">
+            <div class="modal fade variations" id="myModal_<?php echo $key; ?>" tabindex="-1" role="dialog" aria-labelledby="myModal_<?php echo $key; ?>Label" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <div class="modal-body">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                 <div id ="alt_variations_wrap_<?php echo $key; ?>" class="alt_variations_wrap">
                 <?php 
                 if (isset($attr_group['attr_name']) && $attr_group['attr_name']) { ?>
@@ -333,7 +335,7 @@ class Woo_Alt_Variations {
                         </a>
                     </div><!-- /.woocommerce-product-gallery__image -->
                     <?php } else { ?>
-                    <div class="woocommerce-product-gallery__image--placeholder'<?php echo $active; ?>">
+                    <div class="woocommerce-product-gallery__image--placeholder<?php echo $active; ?>">
                        <a href="<?php echo get_permalink($group_product['product_id']); ?>">
                             <div class="var_lnk_inner_wrap">
                                 <img src="<?php echo esc_url( wc_placeholder_img_src( $thumbnail_size ) ); ?>" alt="" class="wp-post-image" />
@@ -349,10 +351,10 @@ class Woo_Alt_Variations {
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
             </div>
-            <?php $html = ob_get_clean();            
-            echo $html; ?>
+            <?php $html .= ob_get_clean(); ?>
         <?php } ?>
         </div><!-- /.alt_variations_groups_wrap -->
+        <?php echo $html; ?>        
     <?php 
     }
 

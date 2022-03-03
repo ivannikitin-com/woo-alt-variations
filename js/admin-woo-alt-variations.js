@@ -110,4 +110,6 @@ jQuery( function( $ ) {
                 }*/
         $( document.body ).trigger( 'wc-enhanced-select-init' );
     } );
+
+    $( ".woocommerce_variable_attributes .sortable_wrap" ).sortable();
 } );
