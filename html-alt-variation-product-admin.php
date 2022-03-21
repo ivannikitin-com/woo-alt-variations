@@ -18,7 +18,7 @@ if (isset($var_product_data['var_attr_value'])) {
     $var_attr_value = '';
 }
 ?>
-<div class="options_group">
+<div class="options_group ui-sortable-handle">
     <div class="variation_product_wrap">
         <!-- <div class="ui-sortable-handle" style="width: 17px; height:17px;"></div> -->
         <div class="form-field product_id product_id_<?php echo $var_product_id; ?>_field ">

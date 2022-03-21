@@ -170,10 +170,6 @@ class Woo_Alt_Variations {
                     )); ?>
                     <a class="button add_variation_attribute"><?php _e('Добавить атрибут вариации ','woo-alt-variations'); ?></a>
                 </div>
-                <?php 
-                /*echo '<pre>';
-                print_r($vars_info_arr); 
-                echo '</pre>';*/ ?>
                 <div class="alt_variations">
                     <?php if ($vars_info) {
                         foreach ($vars_info_arr as $group_key => $group_value) {
@@ -230,10 +226,8 @@ class Woo_Alt_Variations {
                             'var_attr_value' => $_POST['var_attr_value'][$group_key][$prod_key]
                     );
                 }
-            } 
+            }
             update_post_meta( $post_id, 'vars_info', json_encode($vars_info, JSON_UNESCAPED_UNICODE));
-
-            //update_post_meta( $post_id, 'vars_info', '');
         }
     }
 

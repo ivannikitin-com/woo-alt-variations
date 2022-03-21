@@ -1,4 +1,22 @@
 jQuery( function( $ ) {
+
+    $( document ).ready( function() {
+        $( ".modal" ).on( "shown.bs.modal", function() {
+            var urlReplace = "#" + $( this ).attr( 'id' );
+            history.pushState( null, null, urlReplace );
+        } );
+        $( '#myModal' ).on( 'hide.bs.modal', function( e ) {
+            if ( location.hash == '#modal' ) window.history.back();
+        } );
+
+        $( ".modal" ).on( "hidden.bs.modal", function() { history.back( 1 ); } );
+
+        $( window ).on( 'popstate', function( event ) { //pressed back button
+            if ( event.state !== null ) $( '.modal' ).modal( 'hide' );
+        } );
+    } );
+
+
     $( ".upload_image_button" ).on( 'click', function( event ) {
         upload_button = $( this );
         var frame;
@@ -70,9 +88,8 @@ jQuery( function( $ ) {
                 action: 'add_alt_variation_product',
                 post_id: $( '#post_ID' ).val(),
                 group_id: $( event.target ).closest( '.alt_variation' ).attr( 'id' ),
-                var_product_id: $( event.target ).siblings( '.options_group' ).length,
+                var_product_id: $( event.target ).siblings( '.sortable_wrap' ).children( '.options_group' ).length
                 /*security: woocommerce_admin_meta_boxes_alt_variations.add_variation_nonce*/
-
             };
 
             $.post( ajaxurl, data, function( response ) {
@@ -80,7 +97,7 @@ jQuery( function( $ ) {
                 /*variation.addClass( 'variation-needs-update' );*/
 
                 /*$( '.woocommerce-notice-invalid-variation' ).remove();*/
-                $( event.target ).after( variation );
+                $( event.target ).siblings( '.sortable_wrap' ).prepend( variation );
                 //$( 'select.wc-product-search' ).selectWoo( select2_args ).addClass( 'enhanced' );
                 // Ajax product search box
                 $( document.body ).trigger( 'wc-enhanced-select-init' );
