@@ -170,4 +170,12 @@
 	.modal.variations {
 		padding: 0;
 	}
+
+	.modal.variations .modal-body {
+		padding: 15px 2%;
+	}
+
+	.alt_variations_wrap {
+		padding: 35px 0;
+	}
 }
