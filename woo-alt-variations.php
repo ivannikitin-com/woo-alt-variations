@@ -28,7 +28,8 @@ class Woo_Alt_Variations {
         add_action( 'woocommerce_process_product_meta', array( $this, 'alt_variaton_fields_save'), 10 );
         add_action( 'woocommerce_share', array( $this, 'output_alt_variations_links'), 99 );
         add_action( 'wp_enqueue_scripts', array($this, 'plugin_scripts_and_styles'), 10  );
-        add_action( 'woocommerce_product_query', array($this, 'add_product_tax_query', 1000000, 2 ) );
+        add_action( 'woocommerce_product_query', array($this, 'add_product_tax_query'), 10000 );
+        //add_action( 'pre_get_posts', array($this, 'add_product_tax_query'), 1000000, 2 ) );
         add_action( 'wp_ajax_add_alt_variation_attribute', array($this, 'add_alt_variation_attribute' ));
         add_action( 'wp_ajax_add_alt_variation_product', array($this, 'add_alt_variation_product' ));   
     }
@@ -75,7 +76,7 @@ class Woo_Alt_Variations {
     protected function add_terms() {
         $insert_res = wp_insert_term(
             'invisible',  // новый термин
-            'product', // таксономия
+            'var_product_visibility', // таксономия
             array(
                 'slug'        => 'invisible',
             )
@@ -100,35 +101,37 @@ class Woo_Alt_Variations {
     }
 
     public function add_product_tax_query($query ) {
-    /*  echo '<pre>';
-        echo '<pre>';
-        print_r($query);
-        echo '</pre>';*/    
+        global $WOOF;
+        if (isset($WOOF)) {
+            $filter_request = $WOOF->get_request_data();
+        } else {
+            $filter_request = array();
+        }
+
         // Only on Product Category archives pages
-        if( is_admin() || ! is_product_category() || isset( $_GET['swoof'] ) || isset( $query->query_vars['prdctfltr_active'])) {
+        if( is_admin() || ! is_product_category() || isset( $_GET['swoof'] ) || isset( $query->query_vars['prdctfltr_active']) || count($filter_request)) {
             return; 
         }
 
         $tax_query = $query->get( 'tax_query' );
-        if ( ! is_array( $tax_query ) ) {
+/*        if ( ! is_array( $tax_query ) ) {
             $tax_query = array(
                 'relation' => 'AND',
             );
         } else {
             $tax_query['relation'] = 'AND';     
-        }
+        }*/
 
         // The taxonomy for Product Categories
         $taxonomy = 'var_product_visibility';
-
-            $tax_query[] = array(
-                'taxonomy'       => $taxonomy,
-                'field'   => 'slug',
-                'terms'     => array( "invisible"),
-                'operator'   => 'NOT IN'
-            );
+/*        $taxonomy = 'product_tag';*/
+        $tax_query[] = array(
+            'taxonomy'       => $taxonomy,
+            'field'   => 'slug',
+            'terms'     => array( "invisible"),
+            'operator'   => 'NOT IN'
+        );
         $query->set('tax_query', $tax_query);
-     
     }
 
     /**
@@ -154,7 +157,7 @@ class Woo_Alt_Variations {
      */
     public function add_variaton_tab_panel() {
         $product = wc_get_product();
-        $alt_var_visibility = has_term( 'invisible', 'var_product_visibility', $product );
+        $alt_var_visibility = has_term( 'invisible', 'var_product_visibility', $product->get_id() );
         $vars_info = get_post_meta($product->get_id(),'vars_info',true);
         $vars_info_arr = json_decode($vars_info, true);
         ?>
@@ -166,7 +169,7 @@ class Woo_Alt_Variations {
                         'label'         => __('Считать вариацией', 'woocommerce' ), 
                         'description'   => __( 'Если отмечен, то данный товар на страницах каталога не показывается до тех пор, пока не применен фильтр.', 'woo-alt-variations' ),
                         'value'         => ($alt_var_visibility) ? 'yes' : 'no',
-                        'cbvalue'         => ($alt_var_visibility) ? 'yes' : '',
+/*                        'cbvalue'         => ($alt_var_visibility) ? 'yes' : '',*/
                     )); ?>
                     <a class="button add_variation_attribute"><?php _e('Добавить атрибут вариации ','woo-alt-variations'); ?></a>
                 </div>
@@ -205,13 +208,11 @@ class Woo_Alt_Variations {
      */
     public function alt_variaton_fields_save($post_id) {
         //Сохраняем признак видимости данного товара в каталоге
-        if (isset($_POST['var_product_visibility'])) {
-            if ($_POST['var_product_visibility']) {
+        if (isset($_POST['var_product_visibility']) && $_POST['var_product_visibility']) {
                 wp_set_object_terms($post_id, 'invisible', 'var_product_visibility');
-            } else {
-                wp_remove_object_terms( $post_id, 'invisible', 'var_product_visibility' );
-            }
-        } 
+        } else {
+            wp_remove_object_terms( $post_id, 'invisible', 'var_product_visibility' );
+        }
         //Собираем массив данных по вариациям    
         if (isset($_POST['var_group'][0])){
             $vars_info = array();
@@ -291,6 +292,7 @@ class Woo_Alt_Variations {
                     <div class="modal-content">
                         <div class="modal-body">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <button type="button" class="" data-dismiss="modal" aria-hidden="true">Закрыть</button>
                 <div id ="alt_variations_wrap_<?php echo $key; ?>" class="alt_variations_wrap">
                 <?php 
                 if (isset($attr_group['attr_name']) && $attr_group['attr_name']) { ?>

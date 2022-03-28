@@ -43,7 +43,7 @@ class AltVarsContentTypesClass {
 			array(
 					'hierarchical'      => false,
 					'show_ui'           => false,
-					'show_in_nav_menus' => false,
+					'show_in_nav_menus' => true,
 					'query_var'         => is_admin(),
 					'rewrite'           => false,
 					'public'            => false,
