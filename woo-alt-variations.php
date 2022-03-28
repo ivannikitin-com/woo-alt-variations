@@ -29,9 +29,9 @@ class Woo_Alt_Variations {
         add_action( 'woocommerce_share', array( $this, 'output_alt_variations_links'), 99 );
         add_action( 'wp_enqueue_scripts', array($this, 'plugin_scripts_and_styles'), 10  );
         add_action( 'woocommerce_product_query', array($this, 'add_product_tax_query'), 10000 );
-        //add_action( 'pre_get_posts', array($this, 'add_product_tax_query'), 1000000, 2 ) );
         add_action( 'wp_ajax_add_alt_variation_attribute', array($this, 'add_alt_variation_attribute' ));
-        add_action( 'wp_ajax_add_alt_variation_product', array($this, 'add_alt_variation_product' ));   
+        add_action( 'wp_ajax_add_alt_variation_product', array($this, 'add_alt_variation_product' ));
+        add_action( 'woocommerce_after_shop_loop_item', array($this, 'output_variations_quantity' ), 100);
     }
 
     /**
@@ -160,6 +160,9 @@ class Woo_Alt_Variations {
         $alt_var_visibility = has_term( 'invisible', 'var_product_visibility', $product->get_id() );
         $vars_info = get_post_meta($product->get_id(),'vars_info',true);
         $vars_info_arr = json_decode($vars_info, true);
+/*        echo "<pre>";
+        print_r($vars_info_arr);
+        echo "</pre>";*/
         ?>
         <div id="alt_variations_product_data" class="panel wc-metaboxes-wrapper hidden woocommerce_options_panel">
                 
@@ -292,7 +295,7 @@ class Woo_Alt_Variations {
                     <div class="modal-content">
                         <div class="modal-body">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                            <button type="button" class="" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+                            <button type="button" class="additional_close" data-dismiss="modal" aria-hidden="true">Закрыть</button>
                 <div id ="alt_variations_wrap_<?php echo $key; ?>" class="alt_variations_wrap">
                 <?php 
                 if (isset($attr_group['attr_name']) && $attr_group['attr_name']) { ?>
@@ -397,7 +400,24 @@ class Woo_Alt_Variations {
         $group_id = $_POST['group_id'];
         load_template(dirname( __FILE__ ) .'/html-alt-variation-product-admin.php', false, array('group_id' => $group_id, 'var_product_id' => $var_product_id)); 
         wp_die();
-    }    
+    }
+
+    /**
+     * Вывод количества вариаций товара на страницу товарной категории
+     */
+    public function output_variations_quantity() {
+        global $product;
+        $vars_info = get_post_meta($product->get_id(),'vars_info', true);
+        if (!$vars_info) {
+            return;
+        }
+        $var_quantity = substr_count($vars_info, 'product_id');
+        $minus =  substr_count($vars_info, '"'.$product->get_id().'"' );
+        $var_quantity = $var_quantity - $minus;
+        if ($var_quantity) {
+            echo '<div><a href="'.get_permalink($product->get_id()).'" class="">Больше вариантов +'.$var_quantity.'</a></div>';
+        }  
+    }
 
 }
 
