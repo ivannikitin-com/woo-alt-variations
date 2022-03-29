@@ -11,13 +11,13 @@ jQuery( function( $ ) {
 
         $( ".modal" ).on( "hidden.bs.modal", function() { history.back( 1 ); } );
 
-        $( window ).on( 'popstate', function( event ) { //pressed back button
-            if ( event.state !== null ) $( '.modal' ).modal( 'hide' );
-        } );
+        /*        $( window ).on( 'popstate', function( event ) { //pressed back button
+                    if ( event.state !== null ) $( '.modal' ).modal( 'hide' );
+                } );*/
     } );
 
 
-    $( ".upload_image_button" ).on( 'click', function( event ) {
+    $( document ).on( 'click', ".upload_image_button", function( event ) {
         upload_button = $( this );
         var frame;
         event.preventDefault();
