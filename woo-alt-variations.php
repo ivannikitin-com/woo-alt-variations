@@ -32,6 +32,7 @@ class Woo_Alt_Variations {
         add_action( 'wp_ajax_add_alt_variation_attribute', array($this, 'add_alt_variation_attribute' ));
         add_action( 'wp_ajax_add_alt_variation_product', array($this, 'add_alt_variation_product' ));
         add_action( 'woocommerce_after_shop_loop_item', array($this, 'output_variations_quantity' ), 100);
+        add_action( 'plugins_loaded', array($this, 'add_image_thumb'), 0) ;
     }
 
     /**
@@ -98,6 +99,7 @@ class Woo_Alt_Variations {
 
     public function plugin_scripts_and_styles() {
         wp_enqueue_style( 'alt_variations_styles', plugins_url('/css/styles.css', __FILE__) );
+        wp_enqueue_script( 'alt-variations', plugins_url( '/js/woo-alt-variations.js' , __FILE__ ), array( 'jquery'), null, true );
     }
 
     public function add_product_tax_query($query ) {
@@ -108,10 +110,13 @@ class Woo_Alt_Variations {
             $filter_request = array();
         }
 
+        //file_put_contents('add_product_tax_query.log',implode(",", $_GET).PHP_EOL,FILE_APPEND);
+
         // Only on Product Category archives pages
-        if( is_admin() || ! is_product_category() || isset( $_GET['swoof'] ) || isset( $query->query_vars['prdctfltr_active']) || count($filter_request)) {
+        if( is_admin() ||  ! is_product_category() || isset( $_GET['swoof'] ) || isset( $query->query_vars['prdctfltr_active']) || count($filter_request)) {
             return; 
         }
+
 
         $tax_query = $query->get( 'tax_query' );
 /*        if ( ! is_array( $tax_query ) ) {
@@ -132,6 +137,10 @@ class Woo_Alt_Variations {
             'operator'   => 'NOT IN'
         );
         $query->set('tax_query', $tax_query);
+        ob_start();
+        print_r($query);
+        $output= ob_get_clean();
+        //file_put_contents('add_product_tax_query.log',$output.PHP_EOL,FILE_APPEND);
     }
 
     /**
@@ -264,26 +273,54 @@ class Woo_Alt_Variations {
                 //Ищем значение данного атрибута у текущего товара
 
                 $cur_var_attr_name = '';
+                $var_quantity = 0;
                 foreach ($attr_group['products'] as $group_product) {
                     if ($group_product['product_id'] == $product->get_id()) {
                         $cur_var_attr_name = $group_product['var_attr_value']; 
+                    } else {
+                        $var_quantity ++;
                     }
                 } ?>
-                <!--onclick="jQuery.fancybox({
-                    'href':'#alt_variations_wrap_<?php echo $key; ?>',
-                    'minWidth':270,
-                    'maxWidth':500,
-                    'height': '100%',
-                    'autoDimensions': false,
-                    'centerOnScroll': false,
-                    'fitToView': false,
-                    'top': 0,
-                    'mainClass': 'alt_variations'
-                })" -->
                 <button class="var_header" data-toggle="modal" data-target="#myModal_<?php echo $key; ?>"> 
                 <span class="attr_wrap">
-                <span class="attr_title"><?php echo __('Выберите ','woo-alt-variations').$attr_group['attr_name']; ?></span>
-                <span class="attr_subtitle"><?php echo $cur_var_attr_name; ?></span>
+                    <span class="attr_title"><?php echo __('Выберите ','woo-alt-variations').$attr_group['attr_name']; ?></span>
+                    <span class="attr_subtitle"><?php echo $cur_var_attr_name; ?></span>
+                    <div class="attr_images_wrap">
+                    <?php foreach ($attr_group['products'] as $group_product) : 
+                        if ($group_product['image_id']) {
+                            $thumbnail_src = wp_get_attachment_image(
+                                $group_product['image_id'],
+                                'attr_var_thumb'
+                            );
+                        } else {
+                            $thumbnail_src = get_the_post_thumbnail_url($group_product['product_id'], $thumbnail_size);
+                        }
+                        if ($group_product['product_id'] == $product->get_id()) {
+                            $active = " active";
+                        } else {
+                            $active = "";
+                        }                        
+                        if ( $thumbnail_src ) { ?>               
+                            <div class="woocommerce-product-gallery__image hidden <?php echo $active; ?>">
+                                <a href="#">
+                                    <div class="var_lnk_inner_wrap">
+                                        <?php echo $thumbnail_src; ?>
+                                    </div>
+                                </a>
+                            </div><!-- /.woocommerce-product-gallery__image -->
+                        <?php } else { ?>
+                            <div class="woocommerce-product-gallery__image--placeholder hidden <?php echo $active; ?>">
+                               <a href="#">
+                                    <div class="var_lnk_inner_wrap">
+                                        <img src="<?php echo esc_url( wc_placeholder_img_src( 'attr_var_thumb' ) ); ?>" alt="" class="wp-post-image" />
+                                    </div>
+                                </a>
+                            </div><!-- /.woocommerce-product-gallery__image--placeholder --> 
+                        <?php } ?>
+                    <?php endforeach; ?>
+                    <span class="var_quantity hidden ">+<?php //echo $var_quantity; ?></span>
+                    </div>
+
                 </span>
                 <svg focusable="false" viewBox="0 0 24 24" class="range-revamp-svg-icon range-revamp-chunky-header__icon" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="m15.5996 12.0007-5.785 5.7857-1.4143-1.4141 4.3711-4.3716L8.4003 7.629l1.4143-1.4142 5.785 5.7859z"></path></svg>
                 </button>
@@ -313,7 +350,7 @@ class Woo_Alt_Variations {
                         $active = "";
                     }
                     if ($group_product['image_id']) {
-                        $thumbnail_src = wp_get_attachment_image_src( $group_product['image_id'], $thumbnail_size );
+                        //$thumbnail_src = wp_get_attachment_image_src( $group_product['image_id'], $thumbnail_size );
                         $thumbnail_src = wp_get_attachment_image(
                             $group_product['image_id'],
                             'cust_shop_thumbnail'
@@ -417,6 +454,13 @@ class Woo_Alt_Variations {
         if ($var_quantity) {
             echo '<div><a href="'.get_permalink($product->get_id()).'" class="">Больше вариантов +'.$var_quantity.'</a></div>';
         }  
+    }
+
+    /**
+     * Добавление размера миниатюры для вывода миниатюр вариаций в карточку товара
+     */
+    public function add_image_thumb(){
+        add_image_size( 'attr_var_thumb', 50, 50, true );
     }
 
 }

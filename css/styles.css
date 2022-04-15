@@ -73,7 +73,7 @@
 
 .alt_variations_groups_wrap .var_header .attr_wrap {
 	display: flex;
-	width: 90%;
+	width: 97%;
 	justify-content: space-between;
 	flex-direction: column;
 	text-align: left;
@@ -82,6 +82,29 @@
 .alt_variations_groups_wrap .var_header .attr_subtitle {
 	font-weight: normal;
 	padding: 1rem 0 0.1rem 0;
+}
+
+.alt_variations_groups_wrap .var_header .var_quantity {
+	color: #337ab7;
+	border-radius: 85%;
+	border: 1px solid #337ab7;
+	padding: 5px;
+	width: 35px;
+	height: 35px;
+	align-self: center;
+	text-align: center;
+	font-size: 22px;
+	line-height: 22px;
+}
+
+.single-product .summary .attr_images_wrap {
+	display: flex;
+	flex-wrap: wrap;
+	padding-top: 15px;
+}
+
+.single-product .summary .attr_images_wrap .woocommerce-product-gallery__image {
+	margin-right: 10px;
 }
 
 .alt_variations_title {

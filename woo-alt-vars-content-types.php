@@ -43,8 +43,8 @@ class AltVarsContentTypesClass {
 			array(
 					'hierarchical'      => false,
 					'show_ui'           => false,
-					'show_in_nav_menus' => true,
-					'query_var'         => is_admin(),
+					'show_in_nav_menus' => false,
+					'query_var'         => true,
 					'rewrite'           => false,
 					'public'            => false,
 					'label'             => __( 'Видимость в каталоге', 'woo-alt-variations' ),
