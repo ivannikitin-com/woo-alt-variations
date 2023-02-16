@@ -1,0 +1,114 @@
+.product_data .select2-container--default .select2-selection--multiple .select2-selection__choice {
+	padding: 0 20px;
+}
+
+#alt_variations_product_data .toolbar .add_variation {
+	float: none;
+}
+
+#alt_variations_product_data .woocommerce_variable_attributes {
+	padding: 9px 12px 9px 50px !important
+}
+
+.alt_variation.wc-metabox h3 {
+	background-color: #eee;
+}
+
+.alt_variation.wc-metabox h3 .form-field {
+	display: flex;
+	justify-content: space-between;
+	/*display: block;*/
+	width: 80%;
+	padding-left: 100px;
+}
+
+.alt_variation.wc-metabox .form-field {
+	display: block;
+	/*width: 28%;*/
+}
+
+.alt_variation.wc-metabox .variation_product_wrap .form-field {
+	display: flex;
+	flex-direction: column;
+}
+
+.alt_variation.wc-metabox h3 .form-field label {
+	margin-left: -100px;
+}
+
+.alt_variation.wc-metabox .form-field label {
+	float: left;
+	margin-left: -100px;
+	width: 100px;
+}
+
+#alt_variations_product_data .add_variation_product {
+	margin-bottom: 10px;
+}
+
+#alt_variations_product_data .remove_variation_product {
+	display: flex;
+	align-self: center;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+}
+
+#alt_variations_product_data .remove_variation_product .dashicons:before,
+#alt_variations_product_data .remove_variation_attribute .dashicons:before {
+	line-height: 30px;
+}
+
+.alt_variation.wc-metabox .variation_product_wrap {
+	/*border-bottom: 1px solid #eee;*/
+	display: flex;
+	margin-bottom: 10px;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+/*.ui-sortable-handle:before {
+	content: "\f333";
+	font-family: Dashicons;
+	text-align: center;
+	line-height: 1;
+	color: #999;
+	display: block;
+	width: 17px;
+	float: left;
+	height: 100%;
+	line-height: 24px;
+}*/
+
+.woocommerce_variable_attributes .sortable_wrap .ui-sortable-handle:before {
+	content: "\f333";
+	font-family: Dashicons;
+	text-align: center;
+	line-height: 1;
+	color: #999;
+	display: block;
+	float: left;
+	width: 17px;
+	line-height: 64px;
+	margin-right: 10px;
+	cursor: pointer;
+}
+
+.alt_variation.wc-metabox .variation_product_wrap .product_id {
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.alt_variation.wc-metabox .variation_product_wrap .image_id,
+.alt_variation.wc-metabox .variation_product_wrap .var_attr_value {
+	/*width: 40%;*/
+}
+
+.alt_variation.wc-metabox .variation_product_wrap label {
+	margin: 0;
+	width: auto;
+}
+
+.alt_variation.wc-metabox .variation_product_wrap input {
+	width: 100%;
+}
