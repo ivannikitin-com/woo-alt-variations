@@ -250,6 +250,23 @@ class Woo_Alt_Variations {
     }
 
     /**
+     * Получение id всех товаров-вариаций данного товара
+     */
+/*    public function get_alt_variation_ids() {
+        global $product;
+        $vars_info = get_post_meta($product->get_id(),'vars_info', true);
+        $variation_ids = array();
+        if (!$vars_info) {
+            return false;
+        }
+        $attr_groups = json_decode($vars_info, true);
+        foreach ($attr_group['products'] as $group_product) :
+            $variation_ids[] = $group_product['product_id'];
+        endforeach;
+        return $variation_ids;
+    }*/
+
+    /**
      * Вывод вариаций на страницу товарной категории товара
      */
     public function output_alt_variations_thumbs() {
@@ -394,19 +411,15 @@ class Woo_Alt_Variations {
                         }                        
                         if ( $thumbnail_src ) { ?>               
                             <div class="woocommerce-product-gallery__image hidden <?php echo $active; ?>">
-                                <a href="#">
                                     <div class="var_lnk_inner_wrap">
                                         <?php echo $thumbnail_src; ?>
                                     </div>
-                                </a>
                             </div><!-- /.woocommerce-product-gallery__image -->
                         <?php } else { ?>
                             <div class="woocommerce-product-gallery__image--placeholder hidden <?php echo $active; ?>">
-                               <a href="#">
                                     <div class="var_lnk_inner_wrap">
                                         <img src="<?php echo esc_url( wc_placeholder_img_src( 'attr_var_thumb' ) ); ?>" alt="" class="wp-post-image" />
                                     </div>
-                                </a>
                             </div><!-- /.woocommerce-product-gallery__image--placeholder --> 
                         <?php } ?>
                     <?php endforeach; ?>
@@ -563,3 +576,4 @@ class Woo_Alt_Variations {
 
 // Инициализация плагина
 $woo_alt_variations = new Woo_Alt_Variations();
+include(plugin_dir_path( __FILE__ ).'woo-alt-shortcodes.php');
