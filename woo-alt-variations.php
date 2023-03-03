@@ -23,16 +23,17 @@ class Woo_Alt_Variations {
             //add_action( 'current_screen', array( $this, 'current_screen') );
         }
         add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
-        add_filter( 'woocommerce_product_data_tabs', array( $this, 'add_variaton_tab'), 10, 1 );
+        add_filter( 'woocommerce_product_data_tabs', array( $this, 'add_variaton_tab' ), 10, 1 );
         add_action( 'woocommerce_product_data_panels', array( $this, 'add_variaton_tab_panel' ));
-        add_action( 'woocommerce_process_product_meta', array( $this, 'alt_variaton_fields_save'), 10 );
-        add_action( 'woocommerce_single_product_summary', array( $this, 'output_alt_variations_links'), 19 );
-        add_action( 'wp_enqueue_scripts', array($this, 'plugin_scripts_and_styles'), 10  );
+        add_action( 'woocommerce_process_product_meta', array( $this, 'alt_variaton_fields_save' ), 10 );
+        add_action( 'woocommerce_single_product_summary', array( $this, 'output_alt_variations_links' ), 19 );
+        add_action( 'wp_enqueue_scripts', array( $this, 'plugin_scripts_and_styles' ), 10  );
         add_action( 'woocommerce_product_query', array($this, 'add_product_tax_query'), 99000 );
         add_action( 'wp_ajax_add_alt_variation_attribute', array($this, 'add_alt_variation_attribute' ));
         add_action( 'wp_ajax_add_alt_variation_product', array($this, 'add_alt_variation_product' ));
         add_action( 'woocommerce_shop_loop_item_title', array($this, 'output_variations_quantity' ), 5);
-        add_action( 'plugins_loaded', array($this, 'add_image_thumb'), 0) ;
+        add_action( 'plugins_loaded', array( $this, 'add_image_thumb'), 0) ;
+        add_filter( 'comments_template', array( $this, 'aggr_comments'), 100, 1 );
     }
 
     /**
@@ -570,6 +571,14 @@ class Woo_Alt_Variations {
      */
     public function add_image_thumb(){
         add_image_size( 'attr_var_thumb', 50, 50, true );
+    }
+
+    public function aggr_comments( $template ) {
+        global $woocommerce;
+        if ( get_post_type() == 'product' && file_exists( untrailingslashit( plugin_dir_path( __FILE__ ) ) . '/woocommerce/single-product-reviews.php' ) ) {
+            return untrailingslashit( plugin_dir_path( __FILE__ ) . '/woocommerce/single-product-reviews.php');
+        }
+        return $woocommerce->comments_template_loader($template);
     }
 
 }
